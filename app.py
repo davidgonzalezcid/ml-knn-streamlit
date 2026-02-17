@@ -95,18 +95,39 @@ if run:
         }])
 
         # ----------------------------
-        # Render resultados (sin índice y en vertical)
+        # Formateo (enteros) + Render resultados (sin índice)
         # ----------------------------
         st.subheader("Resultados")
 
-        st.markdown("#### Fraccionamiento")
-        st.table(df_frac.reset_index(drop=True).style.hide(axis="index"))
+        # 1) Convertir a enteros (sin decimales)
+        df_frac_show = df_frac.copy()
+        df_frac_show["D1%"] = df_frac_show["D1%"].round(0).astype(int)
+        df_frac_show["D2%"] = df_frac_show["D2%"].round(0).astype(int)
+        df_frac_show["R2%"] = df_frac_show["R2%"].round(0).astype(int)
 
-        st.markdown("#### Corriente D1")
-        st.table(df_d1.reset_index(drop=True).style.hide(axis="index"))
+        df_d1_show = df_d1.round(0).astype(int)
+        df_d2_show = df_d2.round(0).astype(int)
+        df_r2_show = df_r2.round(0).astype(int)
 
-        st.markdown("#### Corriente D2")
-        st.table(df_d2.reset_index(drop=True).style.hide(axis="index"))
+        # 2) Función para mostrar sin índice (robusta)
+        def show_table(df):
+            # Opción preferida: hide_index (si tu Streamlit lo soporta)
+            try:
+                st.dataframe(df, use_container_width=True, hide_index=True)
+            except TypeError:
+                # Fallback universal: agrega una columna vacía a la izquierda y resetea índice
+                df2 = df.reset_index(drop=True).copy()
+                df2.insert(0, "", [""] * len(df2))
+                st.dataframe(df2, use_container_width=True)
 
-        st.markdown("#### Corriente R2")
-        st.table(df_r2.reset_index(drop=True).style.hide(axis="index"))
+        st.markdown("### Fraccionamiento")
+        show_table(df_frac_show)
+
+        st.markdown("### Corriente D1")
+        show_table(df_d1_show)
+
+        st.markdown("### Corriente D2")
+        show_table(df_d2_show)
+
+        st.markdown("### Corriente R2")
+        show_table(df_r2_show)
