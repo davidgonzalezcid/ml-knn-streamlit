@@ -95,24 +95,18 @@ if run:
         }])
 
         # ----------------------------
-        # Render resultados
+        # Render resultados (sin índice y en vertical)
         # ----------------------------
         st.subheader("Resultados")
 
-        c1, c2 = st.columns(2)
-        with c1:
-            st.markdown("#### Tabla 1. Fraccionamiento")
-            st.dataframe(df_frac, use_container_width=True)
+        st.markdown("#### Fraccionamiento")
+        st.table(df_frac.reset_index(drop=True).style.hide(axis="index"))
 
-        with c2:
-            st.markdown("#### Tabla 2. Corriente D1")
-            st.dataframe(df_d1, use_container_width=True)
+        st.markdown("#### Corriente D1")
+        st.table(df_d1.reset_index(drop=True).style.hide(axis="index"))
 
-        c3, c4 = st.columns(2)
-        with c3:
-            st.markdown("#### Tabla 3. Corriente D2")
-            st.dataframe(df_d2, use_container_width=True)
+        st.markdown("#### Corriente D2")
+        st.table(df_d2.reset_index(drop=True).style.hide(axis="index"))
 
-        with c4:
-            st.markdown("#### Tabla 4. Corriente R2")
-            st.dataframe(df_r2, use_container_width=True)
+        st.markdown("#### Corriente R2")
+        st.table(df_r2.reset_index(drop=True).style.hide(axis="index"))
